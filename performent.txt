@@ -1,0 +1,3 @@
+- Về hiệu xuất đơn tác vụ BunJS có thời gian runtime nhanh hơn so với NodeJS khoảng 12%
+
+- Về hiệu xuất đa tác vụ (Non Blocking / Event Loop) BunJS nhanh hơn so với NodeJS khoảng 57% 

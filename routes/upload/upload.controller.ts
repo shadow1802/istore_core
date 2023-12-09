@@ -17,8 +17,8 @@ export default class UploadController {
             const fileName = codeGenerator(8)
             const fileExt = ext[ctx.body.file.type]
             const owner = ctx.store.user._id
-            await Bun.write(`public/${owner}/${fileName}.${fileExt}`, ctx.body.file)
-            return new ResponseSender(200, `/public/${owner}/${fileName}.${fileExt}`, "Thành công")
+            await Bun.write(`public/${owner}_${fileName}.${fileExt}`, ctx.body.file)
+            return new ResponseSender(200, `/public/${owner}_${fileName}.${fileExt}`, "Thành công")
         } catch (error: any) {
             return new ResponseSender(400, null, error.message)
         }
@@ -31,8 +31,8 @@ export default class UploadController {
             const owner = ctx.store.user._id
             ctx.body.files.forEach(item => {
                 const fileName = codeGenerator(10)
-                results.push(`/public/${owner}/${fileName}.${ext[item.type]}`)
-                const maker = Bun.write(`public/${owner}/${fileName}.${ext[item.type]}`, item)
+                results.push(`/public/${owner}_${fileName}.${ext[item.type]}`)
+                const maker = Bun.write(`public/${owner}_${fileName}.${ext[item.type]}`, item)
                 filesMaker.push(maker)
             })
             await Promise.all(filesMaker)

@@ -1,10 +1,10 @@
 import { Context } from "elysia";
-import { CreateItemBody, ItemParams } from "./item.route";
+import { CreateItemBody, ItemParams, UpdateItemBody } from "./item.route";
 import ResponseSender from "../../utils/response.sender";
 import { Item } from "../../models/item.model";
 import type { ItemDetail } from "../../models/item.model";
 import { WithAuth } from "../../types/auth";
-import { itemCreator } from "./item.service";
+import { itemCreator, itemEditor } from "./item.service";
 import { useSlug } from "../../utils/helpers";
 
 export default class ItemController {
@@ -33,13 +33,27 @@ export default class ItemController {
 
     static async create(ctx: Context<{ body: CreateItemBody }> & WithAuth) {
         try {
-
             const { body, store } = ctx
             const item = await itemCreator(body, store.user._id)
             return new ResponseSender(200, item as ItemDetail, "Tạo sản phẩm thành công")
 
         } catch (error: any) {
             return new ResponseSender(404, null, error.message)
+        }
+    }
+
+    static async update(ctx: Context<{ body: UpdateItemBody, params: { id: string }}> & WithAuth) {
+        try {
+            const { body, params, store } = ctx
+
+            console.log(params)
+
+            await itemEditor(params.id, body, store.user._id)
+
+            return new ResponseSender(200, null, "Thay đổi thông tin sản phẩm thành công")
+        } catch(error: any) {
+            console.log(error)
+            return new ResponseSender(400, null, error.message)
         }
     }
 }

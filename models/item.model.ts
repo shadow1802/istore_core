@@ -9,11 +9,11 @@ const ItemSchema = new mongoose.Schema(
     }],
     categories: [{ type: String, default: [] }],
     notes: [{ type: String, default: [] }],
-    model: { type: String },
+    mode: { type: String },
     price: { type: String },
     brand: { type: String },
     count: { type: String, default: 0 },
-    createdBy: { type: mongoose.Types.ObjectId, ref: "User" },
+    createdBy: { type: mongoose.Types.ObjectId, ref: "User", require: true },
     tags: [{ type: String, default: [] }]
   },
   {

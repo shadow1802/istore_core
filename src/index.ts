@@ -12,8 +12,7 @@ import UserRouter from "../routes/user/user.route"
 import UploadRouter from "../routes/upload/upload.route"
 import StoreRouter from "../routes/store/store.route"
 import ItemRouter from "../routes/item/item.route"
-
-
+import ResponseSender from "../utils/response.sender"
 class Program {
   constructor() {
     this.main()
@@ -34,6 +33,11 @@ class Program {
         console.log("after each handle request")
       })
 
+      app.onError((ctx) => {
+        ctx.set.status = 200
+        return new ResponseSender(400, ctx.error, ctx.code)
+      })
+
       app.use(
         cron({
           name: 'heartbeat',
@@ -46,8 +50,11 @@ class Program {
             - day_of_week: (0–6)
           >>>>>>>>>> */
           pattern: '*/10 * * * * *', // each 10 second
-          run() {
+          async run() {
             console.log("Beated at: ", new Date())
+            const file = Bun.file("logs.txt")
+            const content = await file.text()
+            await Bun.write("logs.txt", content + "\n" + "[LOG]: " + new Date().toJSON() + "\n", { mode: 0 })
           }
         })
       ).get('/stop', ({ store: { cron: { heartbeat } } }) => {

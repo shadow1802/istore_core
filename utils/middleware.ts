@@ -3,7 +3,7 @@ import ROLE from "../constants/role"
 import { tokenDecoder } from "../routes/auth/auth.service"
 import ResponseSender from "./response.sender"
 
-export default function AuthMiddleware(ctx: any): ResponseSender | void {
+export default function AuthMiddleware(ctx: any) {
     try {
         if (ctx.headers.authorization) {
             const token = ctx.headers.authorization.split(" ")[1]
